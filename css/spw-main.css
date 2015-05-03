@@ -1,0 +1,95 @@
+/* 
+    Document   : spw-main
+    Created on : Dec 10, 2013, 4:29:00 PM
+    Author     : nelson.capote
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#main-content-login{
+    background: repeat scroll 0 0 rgba(255, 255, 255, 0.5);
+    border: 1px solid #1B335B;
+    border-radius: 5px;
+    /*box-shadow: 1px 1px 8px 1px #FFFFFF;*/
+    padding: 20px;
+    max-height: 520px;
+   
+   
+}
+
+.modal-narrow{
+ width: 400px;
+ margin-left: -200px;
+}
+
+#main-content{
+    background: repeat scroll 0 0 rgba(255, 255, 255, 0.5);
+    border: 1px solid #1B335B;
+    border-radius: 5px;
+    /*box-shadow: 1px 1px 8px 1px #FFFFFF;*/
+    padding: 20px;
+   /* max-height: 450px;*/
+   
+   
+}
+.fiu-logo{
+  left: 844px;
+    position: relative;
+    top: -97px;
+    width: 110px;
+    
+}
+.logo{
+    left: -185px;
+    position: relative;
+    top: -38px;
+    width: 110px;
+    
+}
+.spw{
+   left: -212px;
+    position: relative;
+    top: -46px;
+    width: 110px;
+    
+}
+.prof-login{
+    left: 500px;
+    position: relative;
+    top: -223px;
+}
+
+.form-signin {
+    
+    position: relative;
+}
+
+#phanter-login{
+    /*width: 400px;
+    height: 300px;*/
+    
+}
+.login-service{
+    width:auto;
+    height: auto;
+    
+}
+
+.indent-home{
+    margin-left: 2em;
+    max-height: 300px;
+}
+.loging-footer{
+    padding-left: 21px;
+    padding-right: 21px;
+    position: relative;
+    top: -225px;
+}
+
+.spw_title{
+        left: 230px;
+    position: relative;
+    top: -62px;
+    line-height: 1.1em;
+    color: rgb(144, 97, 43);
+}

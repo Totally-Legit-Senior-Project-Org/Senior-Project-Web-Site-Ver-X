@@ -1,0 +1,282 @@
+<?php $this->load->helper('nav_top') ?>
+<?php $this->load->helper('notifications') ?>
+<?php $this->load->helper("user_image"); ?>
+<?php $this->load->helper("deadline_term"); ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>
+        <?php 
+            if (isset($title) && strlen($title) > 0)
+            {
+                echo $title.' - Senior Project';
+            }
+            else
+            {
+                echo 'Senior Project';
+            }
+        ?>
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <!-- Bootstrap -->
+
+    <link href="<?php echo base_url() ?>css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    <!-- <link href="<?php echo base_url() ?>css/bootstrap-tagmanager.css" rel="stylesheet" media="screen"> -->
+    <link href="<?php echo base_url() ?>css/alertify.core.css" rel="stylesheet" media="screen">
+    <link href="<?php echo base_url() ?>css/alertify.bootstrap.css" rel="stylesheet" media="screen">
+    <link href="<?php echo base_url() ?>css/normalize.css" rel="stylesheet" media="screen">
+
+    <link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
+    <link href="<?php echo base_url() ?>css/jquery-ui.css" rel="stylesheet" media="screen">
+    <link href="<?php echo base_url() ?>css/spw-main.css" rel="stylesheet" media="screen">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="<?php echo base_url() ?>js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url() ?>js/bootstrap-tagmanager.js"></script>
+    <script src="<?php echo base_url() ?>js/alertify.min.js"></script>
+    <!-- added scripts for the date picker-->
+    <script src="<?php echo base_url() ?>js/jquery-1.9.1.js"></script>
+    <script src="<?php echo base_url() ?>js/jquery-ui.js"></script>
+
+	<!--[if lt IE 9]>
+		<script src="<?php echo base_url() ?>js/html5shiv.js"></script>
+	<![endif]-->
+
+</head>
+<body>
+    <div class="container-narrow">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="container">
+                
+
+                <?php if ( !in_array(strtolower(uri_string()), array('login', 'register')) and ! isset($credentials_error) ) { ?>            
+
+                    <?php echo anchor('/', 'Current Projects', array('class' => 'brand')) ?>
+                
+                    <?php
+                        function isActiveNavItem($targetUrl)
+                        {
+                            return trim(strtolower(uri_string())) == trim(strtolower($targetUrl));
+                        }
+                        function get_nav_item_class($targetUrl)
+                        {
+                            $li_class_str = '';
+
+                            if( isActiveNavItem($targetUrl) )
+                            {
+                                $li_class_str = 'class="active"';
+                            }
+
+                            return $li_class_str;
+                        }
+                        function get_nav_item_Internal($targetUrl, $innerHTML)
+                        {
+                            return '<li '.get_nav_item_class($targetUrl).'>'.$innerHTML.'</li>';
+                        }
+                        function get_nav_item($targetUrl, $displayText)
+                        {
+                            return get_nav_item_Internal($targetUrl, anchor($targetUrl, $displayText));
+                        }
+                    ?>
+
+                        <!-- hamburger button to be displayed when taskbar is collapsed -->
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+
+
+                        <div class="nav-collapse collapse">
+
+                            <ul class="nav pull">
+                                <!-- <?php echo get_nav_item('home', 'Home') ?> -->
+                                <?php echo get_nav_item('past-projects', 'Past Projects') ?>
+                                
+                                <?php if(isUserLoggedIn($this)){ 
+                                        if(isProfessor($this)) 
+                                            echo get_nav_item('project', 'Create Projects');
+                                        if (!isProfessor($this))  
+                                            echo get_nav_item('project', 'My Project');
+                                        if ((!isProfessor($this) && isAfterDeadline($this)) || (isProfessor($this) && !isHeadProfessor($this)))
+                                            echo get_nav_item('files/project_files', 'Project Files');            
+                                    }
+                                ?>
+                                
+                                <?php if (isHeadProfessor($this)) { ?>
+                                    <?php echo get_nav_item('admin/admin_dashboard', 'Admin Dashboard') ?>
+                                <?php } ?>
+                                <?php echo get_nav_item('about', 'About') ?>
+
+                                <li class="visible-phone visible-tablet <?php echo isActiveNavItem('mobile-search') ? 'dropdown active' : 'dropdown' ?>">
+                                    <a href="<?php echo base_url().'mobile-search' ?>">
+                                        Search
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <ul class="nav pull-right">
+                                <?php 
+                                    $notificationsCount = getPendingNotificationsCount($this);
+                                    if ($notificationsCount > 0)
+                                    {
+                                ?>
+                                        <li id="notifications-badge" <?php echo get_nav_item_class('notifications') ?> >
+                                            <a href="<?php echo base_url().'notifications' ?>" class="visible-desktop">
+                                                <i class="icon-envelope"></i>
+                                                <span class="badge badge-important"><?php echo $notificationsCount ?></span>
+                                            </a>
+
+                                            <a href="<?php echo base_url().'notifications' ?>" class="visible-phone visible-tablet">                                                
+                                                <span class="badge badge-important"><?php echo $notificationsCount ?></span>
+                                                <span>Notifications Pending</span>
+                                            </a>
+                                        </li>
+                                <?php
+                                    }
+                                ?>
+
+                                <?php if (isUserLoggedIn($this)) { ?>                      
+
+                                    <li class="visible-phone visible-tablet <?php echo isActiveNavItem('me') ? 'dropdown active' : 'dropdown' ?>">
+                                        <a href="<?php echo base_url().'me' ?>">
+                                            <?php echo getCurrentUserHeaderFullName($this)?> Profile
+                                        </a>
+                                    </li>
+                                    <li class="visible-phone visible-tablet">
+                                        <a href="<?php echo base_url().'logout' ?>">
+                                            Logout
+                                        </a>
+                                    </li>
+
+
+                                    <li class="visible-desktop <?php echo isActiveNavItem('me') ? 'dropdown active' : 'dropdown' ?>">
+                                        <a id="link-profile" href="<?php echo base_url().'me' ?>" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-user"></i> <b class="caret"></b>
+                                        
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="link-profile">
+                                            <li role="presentation">
+                                                <a role="menuitem" tabindex="-1" href="<?php echo base_url().'me' ?>">                                               
+                                                        <?php 
+                                                            $src = getUserImage($this, getCurrentUserHeaderImg($this));
+                                                            
+                                                            if ($src == '/img/no-photo.jpeg')
+                                                            {
+                                                                $src = getCurrentUserHeaderImage($this);
+                                                                if($src == null)
+                                                                    $src = '/img/no-photo.jpeg';
+                                                            }
+
+                                                            echo img(array(
+                                                                    'src' => $src . '?x='. time(),
+                                                                    'alt' => 'User Profile Image',
+                                                                    'class' => 'img-header-profile-big img-polaroid'
+                                                                ));
+                                                            
+                                                        ?>
+                                                    <strong><?php echo getCurrentUserHeaderFullName($this)?></strong>
+                                                </a>                                    
+                                            </li>
+
+                                            <?php 
+                                                $notificationsCount = getPendingNotificationsCount($this);
+                                                if ($notificationsCount > 0)
+                                                {
+                                            ?>
+                                                    <li role="presentation">
+                                                        <a role="menuitem" tabindex="-1" href="<?php echo base_url().'notifications' ?>">
+
+                                                            
+                                                            <span class="badge badge-important"><?php echo $notificationsCount ?></span>
+                                                            Notifications Pending                                             
+                                                        
+
+                                                        </a>
+                                                    </li>
+                                            <?php
+                                                }
+                                            ?>
+
+                                            <li role="presentation" class="divider"></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo base_url().'logout' ?>">Logout</a></li>
+                                        </ul>
+                                      </a>
+
+                                    </li>
+
+                                <?php } else { ?>
+
+                                    <?php echo get_nav_item('login', 'Login') ?> 
+
+                                <?php } ?>                    
+                                
+                            </ul>
+
+
+
+                            <?php echo form_open('searchcontroller/search_string', array( 
+                                'class' => 'navbar-search pull-right visible-desktop', 
+                                'id' => 'search-form-top',
+                                'method' => 'GET')) ?>
+                                <div class="input-append">
+                                    <?php
+
+                                        $searchParam = '';
+                                        $uri = uri_string();
+                                        $pos = stripos($uri, 'search/');
+                                        if (isset($pos) && $pos === 0)
+                                        {
+                                            $searchParam = urldecode(substr($uri, strlen('search/')));
+                                        }
+
+                                        echo form_input(array(
+                                            'id' => 'text-search-top',
+                                            'name' => 'q',
+                                            'type' => 'text',
+                                            'class' => 'span2 search-query',
+                                            'placeholder' => 'search for people, skills, projects and terms...',
+                                            'required' => '',
+                                            'title' => 'search criteria',
+                                            'value' => $searchParam
+                                        ));
+                                        
+                                        echo form_button(array(
+                                            'id' => 'btn-search-top',
+                                            'type' => 'Submit',
+                                            'class' => 'btn btn-link',
+                                            'content' => '<i class="icon-search"></i>'
+                                        ));                             
+
+                                    ?>
+                                </div>
+                            <?php echo form_close() ?>     
+
+                    </div>
+                <?php }else {?>
+                <?php echo anchor('login', 'FIU SCIS Senior Project', array('class' => 'brand')) ?>
+                <?php } ?>  
+            </div>
+          </div>
+        </div>
+
+        <div id="main-content-login">     
+
+        <?php if (isFlashMessageAvailable($this)){ ?>
+            <div class="alert <?php echo getFlashMessageClass($this)?>">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <div id="alert-text"><?php echo getFlashMessage($this) ?></div>
+            </div>
+        <?php } else { ?>
+            <div id="alert-js" class="alert">
+              <a id="alert-js-close" href="#" class="close">&times;</a>
+              <div id="alert-js-text"></div>
+            </div>
+        <?php } ?>
+
