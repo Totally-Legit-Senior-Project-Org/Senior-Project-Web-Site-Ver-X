@@ -53,11 +53,11 @@ $db['default']['hostname'] = 'localhost';
 // This username must be changed to work with the db instance of where the clone is installed.
 // The username for the database install on spws and spws-dev is spw_rw
 // The default username on local installations of MySql is root
-$db['default']['username'] = 'root'; 
+$db['default']['username'] = 'spw_rw'; 
 // This password must be changed to work with the db instance of where the clone is installed.
 // The password for the database install on spws and spws-dev is 123FIUspw
 // The default password on local installations of MySql is root
-$db['default']['password'] = ''; 
+$db['default']['password'] = '123FIUspw'; 
 $db['default']['database'] = 'senior_project_website';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
