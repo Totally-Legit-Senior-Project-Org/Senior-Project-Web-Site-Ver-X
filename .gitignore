@@ -1,4 +1,3 @@
-application/config/database.php
 */config/development
 */logs/log-*.php
 */logs/!index.html
@@ -6,5 +5,3 @@ application/config/database.php
 */cache/!index.html
 *.orig
 /nbproject/private/
-
-application/config/database.php
